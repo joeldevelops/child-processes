@@ -1,0 +1,8 @@
+{
+    "apps": [{
+        "name": "Generational Orphans",
+        "script": "./scripts/start-managed-processes.js",
+        "max_restarts": 3,
+        "force": true
+    }]
+}

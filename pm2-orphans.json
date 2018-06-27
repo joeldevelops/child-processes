@@ -1,0 +1,8 @@
+{
+    "apps": [{
+        "name": "Generational Orphans",
+        "script": "./scripts/create-orphans.js",
+        "max_restarts": 3,
+        "force": true
+    }]
+}

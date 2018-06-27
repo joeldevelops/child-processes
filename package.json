@@ -1,0 +1,31 @@
+{
+  "name": "npm-start-pitfalls",
+  "version": "1.0.0",
+  "description": "A rundown of issues with using npm start instead of node <filename>.",
+  "main": "./scripts/start-processes.js",
+  "scripts": {
+    "start": "node ./scripts/start-processes.js",
+    "start:one": "node ./servers/node-server.js",
+    "start:orphans": "node ./scripts/create-orphans.js",
+    "start:managed": "node ./scripts/start-managed-processes.js",
+    "pm2:orphans": "pm2 start ./pm2-orphans.json",
+    "pm2:managed": "pm2 start ./pm2-managed.json",
+    "pm2:kill": "pm2 kill"
+  },
+  "keywords": [
+    "npm",
+    "node",
+    "child",
+    "process",
+    "start",
+    "server"
+  ],
+  "author": "Joel Milligan <joeldevelops@gmail.com> (http://joeldev.io/)",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "pm2": "^2.10.4",
+    "portfinder": "^1.0.13",
+    "yargs": "^11.0.0"
+  }
+}
