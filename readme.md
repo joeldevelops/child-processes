@@ -90,7 +90,7 @@ During triaging of another issue one day, we took a look at the processes runnin
 
 Turns out that between pm2 and our home grown script service, any time a test was run that failed (with `exec()` no less), our server would error out and pm2 would bring it right back up. I now know that it was because the child processes were created in a different process group than what created them, and windows didn't even know to kill them. 
 
-In the aftermath I had many a nightmare about this issues and decided to write up this repo. Hopefully it helps others to avoid the same fate.
+It took a very long time to debug the cause and in the aftermath of that nightmarish hellscape I've written up this repo. Hopefully it helps others to avoid a similar fate.
 
 
 #### **_Fin_**
