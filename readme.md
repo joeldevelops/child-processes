@@ -53,7 +53,7 @@ It should already be obvious where this is going but in case it isn't, run the f
 
 I've written the `create-orphans.js` script to error out after 5 seconds. When pm2 realizes that the script is down it will automatically restart it.
 
-![Pure Horror](docs/purehorror.png)
+![Pure Horror](docs/purehorror.PNG)
 
 If you don't already have a look of pure terror shining on your face, let me reiterate:
 **Spawning child processes in node can blow up your production machines if not done correctly**
