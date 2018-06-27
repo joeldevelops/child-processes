@@ -45,7 +45,7 @@ This is happening because of the parent-child relationship of the node processes
 
 Knowing that node child processes can continue long after their parent process was killed, what are some implications?
 
-For at least one example, imagine that a company has a script (much like [`create-orphans.js`](scripts/create-orphans.js)) in production that spawns 2 child shells. And their team - having good microservices developers - installed pm2 to monitor their applications health and autorestart when the application fails.
+For at least one example, imagine that a company has a script (much like [`create-orphans.js`](scripts/create-orphans.js)) in production that spawns 2 child shells. And their team - having good microservices developers - installed pm2 to monitor their application's health and autorestart when the application fails.
 
 It should already be obvious where this is going but in case it isn't, run the following script (but don't foget to close it!):
 
@@ -53,7 +53,7 @@ It should already be obvious where this is going but in case it isn't, run the f
 
 I've written the `create-orphans.js` script to error out after 5 seconds. When pm2 realizes that the script is down it will automatically restart it.
 
-[[docs/purehorror.png|alt=Pure Horror]]
+![Pure Horror](docs/purehorror.png)
 
 If you don't already have a look of pure terror shining on your face, let me reiterate:
 **Spawning child processes in node can blow up your production machines if not done correctly**
