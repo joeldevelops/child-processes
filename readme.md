@@ -9,6 +9,8 @@ This repo exists to help people learn about an aspect of node/npm that may not b
 
 When running the following tests on windows (which is what this is targeted at), I recommend having task manager open on the 'Details' page to see all of your node instances.
 
+If you'd like to play around with creating different numbers of child processes, there is a `--count <instances>` argument you can mess around with. This is for any of the scripts in the [`/scripts`](scripts/) folder.
+
 **NOTE:** This repo was made using the latest version of npm at the time, v6.1.0, and may have different effects on linux or mac systems.
 
 -----------------------------------------------------------
@@ -74,7 +76,7 @@ Voila! Our child proccess are now killed every time the parent closes out.
 
 So what the heck is happening? It turns out that certain node commands pre-specify the [process group](https://docs.microsoft.com/en-us/windows/console/console-process-groups) that child processes belong to. `exec()` creates a new detached shell to run your commands in and any node processes run here are entirely new and removed from the parent process. `fork()` creates a new managed process in the same process group as the parent; so that when the parent terminates, windows knows to kill all the processes in that group. [More info](https://github.com/nodejs/node/issues/5146).
 
-I highly reccommend reading all about the node [`child_process`](https://nodejs.org/api/child_process.html) module and what each of the functions do and use cases before settling on any one command. And if you do use `exec()` or `{ detached: true }`, make sure there is a clear and concise way to kill any child processes.
+I highly recommend reading all about the node [`child_process`](https://nodejs.org/api/child_process.html) module and what each of the functions do and use cases before settling on any one command. And if you do use `exec()` or `{ detached: true }`, make sure there is a clear and concise way to kill any child processes.
 
 ## Final Horror Story
 
@@ -98,3 +100,4 @@ In the aftermath I had many a nightmare about this issues and decided to write u
 **Additional Notes:**
 
 I tried to make everything in here as correct as possible. If anything in here is wrong or if there is something I forgot to add, please let me know and we can fix it :)
+
