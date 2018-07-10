@@ -78,7 +78,7 @@ Voila! Our child proccess are now killed every time the parent closes out.
 
 ## Process Groups
 
-So what the heck is happening? It turns out that certain node commands pre-specify the [process group](https://docs.microsoft.com/en-us/windows/console/console-process-groups) that child processes will belong to. `exec()` creates a new detached shell in a new process group to run your commands/node instances. `fork()` creates a new managed process in the same process group as the parent; so that when the parent terminates, windows knows to kill all the processes in that group. [More info](https://github.com/nodejs/node/issues/5146).
+So what the heck is happening? It turns out that certain node commands pre-specify the [process group](https://docs.microsoft.com/en-us/windows/console/console-process-groups) that child processes will belong to. `exec()` creates a new detached shell in a new process group to run your commands/node instances. `fork()` creates a new managed process in the same process group as the parent; so that when the parent terminates, windows knows to send kill signals to all the processes in that group. [More info](https://github.com/nodejs/node/issues/5146).
 
 It's important to notice that any node processes created with the `exec()` command are entirely removed from the parent process in terms of communication. Since these child processes are in a new process group, they'll never recieve any kill signals (`SIGTERM`, ect.) if their parent dies.
 
