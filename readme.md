@@ -62,6 +62,7 @@ It's worth noting that this is a _worst case_ scenario. This specific situation 
 - Child processes are spawned in a new [Process Group](#process-groups)
 - Poor error handling is present in the app
 - A process manager with autorestart is used
+
 Can it happen in other settings? Sure, but this is most likely situation I can think of.
 
 ## Child Process Exit on Parent Exit, Or, Exec Versus Fork
