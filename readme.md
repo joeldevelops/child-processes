@@ -37,7 +37,7 @@ Run this command in a terminal:
 
 This command runs the [`start-processes.js`](scripts/start-processes.js) node script. Looking at the Details view of the task manager you'll see **four** node processes: the node instances for the npm script, the node instance for our script that starts the servers, and our two servers. This might be troubling, but something worse happens when you `Ctrl+C` out of the script: _only 2 of the 4 processes are actually killed._
 
-This is happening because of the parent-child relationship of the node processes. When the parent npm script is killed, the child process is also killed. But since the children shells of the child process were not written to respond to their parent exiting, they continue running in a disconnected state. 
+This is happening because of the parent-child relationship of the node processes. When the parent npm script is killed, the child process is also killed. But since the children shells of the child process were not written to respond to their parent exiting, they continue running in a disconnected state. To better understand this, read the section on [Process Groups](#process-groups) below.
 
 **Note** that for this particular instance, it is the child of `npm start` that is actually causing the orphaned processes. `node .` will have the same effect, albeit with one less process (3 instead of 4).
 
@@ -58,7 +58,11 @@ I've written the `create-orphans.js` script to error out after 5 seconds. When p
 If you don't already have a look of pure terror shining on your face, let me reiterate:
 **Spawning child processes in node can blow up your production machines if not done correctly**
 
-It's worth noting that this is a _worst case_ scenario. This specific situation is most likely to come about if there is both poor error handling and use of a process manager with autorestart. Can it happen in other settings? Sure, but this is possibly the worst and most likely situation I can think of.
+It's worth noting that this is a _worst case_ scenario. This specific situation will happen when: 
+- Child processes are spawned in a new [Process Group](#process-groups)
+- Poor error handling is present in the app
+- A process manager with autorestart is used
+Can it happen in other settings? Sure, but this is most likely situation I can think of.
 
 ## Child Process Exit on Parent Exit, Or, Exec Versus Fork
 
@@ -74,9 +78,11 @@ Voila! Our child proccess are now killed every time the parent closes out.
 
 ## Process Groups
 
-So what the heck is happening? It turns out that certain node commands pre-specify the [process group](https://docs.microsoft.com/en-us/windows/console/console-process-groups) that child processes belong to. `exec()` creates a new detached shell to run your commands in and any node processes run here are entirely new and removed from the parent process. `fork()` creates a new managed process in the same process group as the parent; so that when the parent terminates, windows knows to kill all the processes in that group. [More info](https://github.com/nodejs/node/issues/5146).
+So what the heck is happening? It turns out that certain node commands pre-specify the [process group](https://docs.microsoft.com/en-us/windows/console/console-process-groups) that child processes will belong to. `exec()` creates a new detached shell in a new process group to run your commands/node instances. `fork()` creates a new managed process in the same process group as the parent; so that when the parent terminates, windows knows to kill all the processes in that group. [More info](https://github.com/nodejs/node/issues/5146).
 
-I highly recommend reading all about the node [`child_process`](https://nodejs.org/api/child_process.html) module and what each of the functions do and use cases before settling on any one command. And if you do use `exec()` or `{ detached: true }`, make sure there is a clear and concise way to kill any child processes.
+It's important to notice that any node processes created with the `exec()` command are entirely removed from the parent process in terms of communication. Since these child processes are in a new process group, they'll never recieve any kill signals (`SIGTERM`, ect.) if their parent dies.
+
+I highly recommend reading all about the node [`child_process`](https://nodejs.org/api/child_process.html) module and what each of the functions do and use cases before settling on any one command. And if you do use `exec()` or `spawn({ detached: true })`, make sure there is a clear and concise way to kill any child processes.
 
 ## Final Horror Story
 
